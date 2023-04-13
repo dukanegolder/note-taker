@@ -1,0 +1,42 @@
+const router = require("express").Router();
+const uuid = require("uuid");
+const fs = require("fs");
+
+router.get("/notes", (req, res) => {
+  fs.readFile("db/db.json", "utf-8", (err, data) =>
+    err ? console.error(err) : res.json(JSON.parse(data))
+  );
+});
+
+router.post("/notes", (req, res) => {
+  const { title, text } = req.body;
+
+  const newNote = {
+    id: uuid.v4(),
+    title,
+    text,
+  };
+
+  fs.readFile("db/db.json", "utf-8", (err, data) => {
+    if (err) throw err;
+    const parsedData = JSON.parse(data);
+    parsedData.push(newNote);
+    fs.writeFile("db/db.json", JSON.stringify(parsedData, null, 4), (err) =>
+      err ? console.error(err) : res.redirect("/notes")
+    );
+  });
+});
+
+router.delete("/notes/:id", (req, res) => {
+  fs.readFile("db/db.json", "utf-8", (err, data) => {
+    if (err) throw err;
+    const parsedData = JSON.parse(data);
+    const id = req.params.id;
+    const noteToDelete = parsedData.filter((note) => note.id != id);
+    fs.writeFile("db/db.json", JSON.stringify(noteToDelete, null, 4), (err) =>
+      err ? console.error(err) : res.redirect("/notes")
+    );
+  });
+});
+
+module.exports = router;
