@@ -41,4 +41,8 @@ This project is licensed under the MIT License. See LICENSE in the repo for more
 
 ## Assets
 
+![Alt text](assets/Screenshot%202023-04-12%20at%208.34.09%20PM.png)
+
 ## Deployed Application:
+
+https://the-note-taker-app.herokuapp.com/
